@@ -5,6 +5,8 @@ from scipy.signal import convolve2d
 
 from . import bot, offline_perfect_bot, perfect_bot
 
+# PIECES = ["🔴", "🟡"]
+PIECES = ["🟡", "🔴"]
 
 class Connect4:
 
@@ -33,7 +35,11 @@ class Connect4:
         return Connect4(self)
 
     def print_board(self):
-        print(self.board)
+        board_str = "\n".join(str(self.board[row]) for row in range(len(self.board)))
+        board_str = board_str.replace("0", "  ")
+        board_str = board_str.replace("1", PIECES[0])
+        board_str = board_str.replace("2", PIECES[1])
+        print(board_str)
 
     def play_turn(self, column, is_human=True):
         if column < 0 or column > self.width - 1:
@@ -59,8 +65,9 @@ class Connect4:
                 return
 
     def get_input(self):
+        piece = PIECES[0] if self.turn == 1 else PIECES[1]
         while True:
-            raw_input = input("Enter column to insert piece: ")
+            raw_input = input(f"Enter column to insert piece ({piece}): ")
             try:
                 column = int(raw_input)
             except ValueError:
